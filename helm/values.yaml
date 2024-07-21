@@ -1,0 +1,3 @@
+deployment:
+  imageVersion: IMAGE_VERSION #this is called place holder, as we will change in dynamically
+  replicas: 2
