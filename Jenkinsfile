@@ -13,6 +13,8 @@ pipeline {
     environment{
         def appVersion = ''   // variable declaration
         nexusUrl = 'nexus.mahidevops.cloud:8081'
+        region   = "us-east-1"
+        account_id = "637423260578"
     }
     stages {
         stage('read the version') {
@@ -44,7 +46,12 @@ pipeline {
         stage('Docker Build'){
             steps {
                 sh """
-                docker build -t backend:${appVersion} .
+                aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${account_id}.dkr.ecr.${region}.amazonaws.com
+
+                docker build -t ${account_id}.dkr.ecr.${region}.amazonaws.com/expense-backend:${appVersion} .
+
+                docker push ${account_id}.dkr.ecr.${region}.amazonaws.com/expense-backend:${appVersion}
+
                 """
             }
         }
